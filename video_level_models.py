@@ -41,10 +41,47 @@ class LogisticModel(models.BaseModel):
       A dictionary with a tensor containing the probability predictions of the
       model in the 'predictions' key. The dimensions of the tensor are
       batch_size x num_classes."""
+
+    
     output = slim.fully_connected(
         model_input, vocab_size, activation_fn=tf.nn.sigmoid,
         weights_regularizer=slim.l2_regularizer(l2_penalty))
     return {"predictions": output}
+
+
+class NeuralNetworkModel(models.BaseModel):
+  """Neural Network model with L2 regularization."""
+
+  def create_model(self, model_input, vocab_size, l2_penalty=1e-8, **unused_params):
+    """Creates a Neural Network model.
+
+    Args:
+      model_input: 'batch' x 'num_features' matrix of input features.
+      vocab_size: The number of classes in the dataset.
+
+    Returns:
+      A dictionary with a tensor containing the probability predictions of the
+      model in the 'predictions' key. The dimensions of the tensor are
+      batch_size x num_classes."""
+
+    print "Neural Netowrk model input = ",model_input
+
+    output1 = slim.fully_connected(
+        model_input, 10000, activation_fn=tf.nn.sigmoid,
+        weights_regularizer=slim.l2_regularizer(l2_penalty))
+
+    print "output1 = ",output1
+
+    output2 = slim.fully_connected(
+        output1, vocab_size, activation_fn=tf.nn.sigmoid,
+        weights_regularizer=slim.l2_regularizer(l2_penalty))
+
+    print "output2 = ",output2
+
+    return {"predictions": output2}
+
+
+
 
 class MoeModel(models.BaseModel):
   """A softmax over a mixture of logistic models (with L2 regularization)."""
