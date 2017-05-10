@@ -263,7 +263,7 @@ class GruRNNModel(models.BaseModel):
     stacked_gru_rnn = tf.contrib.rnn.MultiRNNCell(
             [
                 tf.contrib.rnn.GRUCell(
-                    lstm_size)
+                    gru_size)
                 for _ in range(number_of_layers)
                 ])
 
